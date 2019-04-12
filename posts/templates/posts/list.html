@@ -1,4 +1,16 @@
 {% extends 'base.html' %}
 {% block body %}
 <h1>리스트페이지</h1>
+<br>
+<br>
+<a href="{% url 'posts:new' %}">글 작성하기</a>
+<hr>
+<h1> 작성한 글 </h1>
+<br>
+{% for post in posts %}
+    <a href="{% url 'posts:detail' post.pk %}">{{ post.content }}</a>
+    <br>
+    <hr>
+{% endfor %}
+
 {% endblock %}

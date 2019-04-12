@@ -4,6 +4,8 @@ from django.urls import reverse
 # Create your models here.
 class Post(models.Model):
     content = models.TextField()
+    image = models.ImageField()
+    
     
     def __str__(self):
         return f'POST : {self.pk}'
