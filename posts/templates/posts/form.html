@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block body %}
+{% load crispy_forms_tags %}
+<span class="page_title">New Post</span>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ post_form|crispy }}
+    {% if image_form %}
+        {{ image_form|crispy }}
+    {% endif %}
+    <input class="btn btn-warning" type="submit" value="작성하기">
+</form>
+
+{% endblock %}

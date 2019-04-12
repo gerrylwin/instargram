@@ -4,8 +4,24 @@
 <p> {{ post.pk }}</p>
 <br>
 <p> {{ post.content }}</p>
-
-<a href="{% url 'posts:edit' post.pk %}">수정</a>&nbsp;
+    <div id="carouselExampleControls" class="carousel slide" style="" data-ride="carousel">
+          <div class="carousel-inner">
+            {% for image in post.image_set.all %}
+            <div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}">
+              <img src="{{ image.file.url }}" class="d-block" alt="{{ image.file }}" height="600px">
+            </div>
+            {% endfor %}
+          </div>
+          <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+<a href="{% url 'posts:update' post.pk"> 수정하기 </a>
 <form action="{% url 'posts:delete' post.pk %}" method="POST">
     {% csrf_token %}
     <input type="submit" value="삭제">

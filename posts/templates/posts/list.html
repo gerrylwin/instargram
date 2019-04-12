@@ -1,16 +1,21 @@
 {% extends 'base.html' %}
 {% block body %}
-<h1>리스트페이지</h1>
+<h1> 작성 글 </h1>
 <br>
-<br>
-<a href="{% url 'posts:new' %}">글 작성하기</a>
-<hr>
-<h1> 작성한 글 </h1>
-<br>
-{% for post in posts %}
-    <a href="{% url 'posts:detail' post.pk %}">{{ post.content }}</a>
-    <br>
-    <hr>
-{% endfor %}
+
+
+<div class="row w-200">
+    <!--<div class="card-deck">-->
+    {% for post in posts %}
+        <div class="col-xs-12 col-sm-6 col-md-4 my-2">
+            
+              <div class="card border-0" id="ca">
+                    <a href="{% url 'posts:detail' post.pk %}" class="asize"><img src="{{ post.image_set.first.file.url }}" class="img"  alt="{{ post.image_set.first.file.url }}"></a>
+              </div>
+            
+        </div>
+    {% endfor %}
+    <!--</div>-->
+</div>
 
 {% endblock %}
