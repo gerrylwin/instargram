@@ -2,7 +2,7 @@
 {% block body %}
 {% load crispy_forms_tags %}
 <span class="page_title">New Post</span>
-<form method="POST" enctype="multipart/form-data">
+<form method="POST" enctype="multipart/form-data"> 
     {% csrf_token %}
     {{ post_form|crispy }}
     {% if image_form %}

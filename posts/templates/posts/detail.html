@@ -21,9 +21,21 @@
             <span class="sr-only">Next</span>
           </a>
         </div>
-<a href="{% url 'posts:update' post.pk"> 수정하기 </a>
+<a href="{% url 'posts:edit' post.pk %}"> 수정하기 </a>
 <form action="{% url 'posts:delete' post.pk %}" method="POST">
     {% csrf_token %}
     <input type="submit" value="삭제">
 </form>
+
+<p>댓글들</p>
+{% load crispy_forms_tags %}
+<form method="POST">
+  {% csrf_token %}
+    <p>댓글 : <input type="text" name="comments"></p>
+    <input type="submit" value="댓글 작성">
+</form>
+
+{% for comment in comments %}
+<p>{{ comment }}</p>
+{% endfor %}
 {% endblock %}

@@ -16,3 +16,7 @@ class Post(models.Model):
 class Image(models.Model):
     file = models.ImageField()
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    
+class Comment(models.Model):
+    comment = models.TextField()
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
