@@ -31,22 +31,27 @@
 <br>
 <br>
 {% if request.user.is_superuser %}
-<a href="{% url 'posts:edit' post.pk %}"> 수정하기 </a>
+<a href="{% url 'posts:edit' post.pk %}"> Post 수정하기 </a>
 <form action="{% url 'posts:delete' post.pk %}" method="POST">
     {% csrf_token %}
-    <input type="submit" value="삭제">
+    <input type="submit" value="Post 삭제">
 </form>
 {% elif request.user == post.user %}
-<a href="{% url 'posts:edit' post.pk %}"> 수정하기 </a>
+<a href="{% url 'posts:edit' post.pk %}"> Post 수정하기 </a>
 <form action="{% url 'posts:delete' post.pk %}" method="POST">
     {% csrf_token %}
-    <input type="submit" value="삭제">
+    <input type="submit" value="Post 삭제">
 </form>
 {% endif %}
-
+<br>
 <p>댓글들</p>
   {% for riple in post.comment_set.all %}
-    <p>님: {{ riple.comment }}</p>
+  <hr>
+    <p>{{ riple.user }}님: {{ riple.comment }}</p>
+    <form action="{% url 'posts:del_comment' post.pk comment_pk %}" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="댓글 삭제">
+    </form>
   {% endfor %}
 <br>
 <br>

@@ -92,7 +92,17 @@ def new_comment(request, post_pk):
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
             comment.post = post
+            comment.user = request.user
             comment.save()
+    return redirect('posts:detail', post_pk)
+
+def del_comment(request, post_pk, comment_pk):
+    post = get_object_or_404(Post, pk=post_pk)
+    # comment = Comment.objects.all()
+    # if request.user != post.comment.comment.user:
+    if request.method == "POST":
+        comment = Comment.objects.get(pk=comment_pk)
+        post.comment.delete()
     return redirect('posts:detail', post_pk)
 
 def like(request, post_pk): # 어떤 포스트인지 아이디를 가져와야하므로
