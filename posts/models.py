@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.conf import settings
+from django.contrib.auth import get_user_model
 
 # Create your models here.
 class Post(models.Model):
@@ -27,3 +28,4 @@ class Image(models.Model):
 class Comment(models.Model):
     comment = models.TextField()
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)

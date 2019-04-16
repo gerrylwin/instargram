@@ -23,9 +23,9 @@
         </div>
 <hr>
 {% if user in post.like_users.all %}
-  <a href="{% url 'posts:like' post.pk %}"><i class="fas fa-heart fa-2x" style="color:red;"></i></a>
+  <a href="{% url 'posts:like' post.pk %}?next={% url 'posts:list' %}"><i class="fas fa-heart fa-2x" style="color:red;"></i></a>
 {% else %}  
-  <a href="{% url 'posts:like' post.pk %}"><i class="far fa-heart fa-2x" style="color:red;"></i></a>
+  <a href="{% url 'posts:like' post.pk %}?next={% url 'posts:list' %}"><i class="far fa-heart fa-2x" style="color:red;"></i></a>
 {% endif %}
 <span>{{ post.like_count }} 명이 좋아요를 눌렀습니다 !</span>
 <br>
@@ -45,14 +45,14 @@
 {% endif %}
 
 <p>댓글들</p>
-  {% for comment in comments %}
-    <p>{{ comment }}</p>
+  {% for riple in post.comment_set.all %}
+    <p>님: {{ riple.comment }}</p>
   {% endfor %}
 <br>
 <br>
 
 {% load crispy_forms_tags %}
-<form method="POST">
+<form action="{% url 'posts:new_comment' post.pk %}" method="POST">
   {% csrf_token %}
   {{ comment_form|crispy }}
     <!--<p>댓글 : <input type="text" name="comments"></p>-->

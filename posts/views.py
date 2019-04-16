@@ -81,19 +81,18 @@ def delete(request, post_pk):
 
 def detail(request, post_pk):
     post = get_object_or_404(Post, pk=post_pk)
-    comments = Comment.objects.all()
     comment_form = CommentForm()
-    context = {'post': post, 'comment_form':comment_form, 'comments':comments}
+    context = {'post': post, 'comment_form':comment_form}
     return render(request, 'posts/detail.html', context)        
 
 def new_comment(request, post_pk):
+    post = get_object_or_404(Post, pk=post_pk)
     if request.method == "POST":
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
-            comment_form.save()
-            # return redirect('posts:detail', post_pk)
-
-    context = {'comment_form':comment_form}
+            comment = comment_form.save(commit=False)
+            comment.post = post
+            comment.save()
     return redirect('posts:detail', post_pk)
 
 def like(request, post_pk): # 어떤 포스트인지 아이디를 가져와야하므로

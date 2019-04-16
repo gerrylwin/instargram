@@ -27,7 +27,7 @@ def login(request):
         login_form = AuthenticationForm(request, request.POST) # session에 값을 넘겨준다는 느낌
         if login_form.is_valid():
             auth_login(request, login_form.get_user())
-            return redirect('posts:list')
+            return redirect(request.GET.get('next') or 'posts:list')
     else:    
         login_form = AuthenticationForm()
     context = {'login_form':login_form}
