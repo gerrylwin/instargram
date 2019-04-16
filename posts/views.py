@@ -36,12 +36,6 @@ def new(request):
         image_form = ImageForm()
     context = {'post_form': post_form, 'image_form': image_form}
     return render(request, 'posts/form.html', context)
-
-def detail(request, post_pk):
-    # Post.objects.get(pk=post_pk)
-    post = get_object_or_404(Post, pk=post_pk)
-    context = {'post': post}
-    return render(request, 'posts/detail.html', context)
     
 def edit(request, post_pk):
     post = get_object_or_404(Post, pk=post_pk)
@@ -62,6 +56,8 @@ def edit(request, post_pk):
                     image.save()
             return redirect(post)
     else:
+        if request.user != post.user:
+            return redirect(post)
         post_form = PostForm(instance=post)
         image_form = ImageForm()
     context = {'post_form':post_form, 'image_form':image_form}
@@ -69,26 +65,47 @@ def edit(request, post_pk):
     
 def delete(request, post_pk):
     post = get_object_or_404(Post, pk=post_pk)
+    if request.user != post.user:
+        return redirect('posts:list')
     if request.method=="POST":
         post.delete()
     return redirect('posts:list')
         
-def new_comment(request, post_pk):
-    if request.method == "POST":
-        comments = Comment()
-        comments = request.POST.comments
-        comments.save()
-        context = {'comments':comments}
-        return redirect('posts:detail', post_pk)
-        
-        
 # def new_comment(request, post_pk):
 #     if request.method == "POST":
-#         comment_form = CommentForm(request.POST)
-#         if comment_form.is_valid():
-#             comment_form.save()
-#             return redirect('posts:detail', post_pk)
-#     else:
-#         comment_form = CommentForm()
-#     context = {'comment_form':comment_form}
-#     return render(request, 'detail.html', context)
+#         comments = Comment()
+#         comments = request.POST.comments
+#         comments.save()
+#         context = {'comments':comments}
+#         return redirect('posts:detail', post_pk)
+
+def detail(request, post_pk):
+    post = get_object_or_404(Post, pk=post_pk)
+    comments = Comment.objects.all()
+    comment_form = CommentForm()
+    context = {'post': post, 'comment_form':comment_form, 'comments':comments}
+    return render(request, 'posts/detail.html', context)        
+
+def new_comment(request, post_pk):
+    if request.method == "POST":
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment_form.save()
+            # return redirect('posts:detail', post_pk)
+
+    context = {'comment_form':comment_form}
+    return redirect('posts:detail', post_pk)
+
+def like(request, post_pk): # 어떤 포스트인지 아이디를 가져와야하므로
+    post = get_object_or_404(Post, pk=post_pk)
+    user = request.user # 로그인 된 유저의 정보를 가져옴
+    # user가 지금 해당 게시글에 좋아요를 한적이 있는지 ?
+    # if user in post.like_users.all():
+    #     post.like_users.remove(user)
+    # else:
+    #     post.like_users.add(user)
+    if post.like_users.filter(pk=user.id).exists():
+        post.like_users.remove(user)
+    else:
+        post.like_users.add(user)
+    return redirect('posts:detail', post.pk)

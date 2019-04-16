@@ -21,21 +21,42 @@
             <span class="sr-only">Next</span>
           </a>
         </div>
+<hr>
+{% if user in post.like_users.all %}
+  <a href="{% url 'posts:like' post.pk %}"><i class="fas fa-heart fa-2x" style="color:red;"></i></a>
+{% else %}  
+  <a href="{% url 'posts:like' post.pk %}"><i class="far fa-heart fa-2x" style="color:red;"></i></a>
+{% endif %}
+<span>{{ post.like_count }} 명이 좋아요를 눌렀습니다 !</span>
+<br>
+<br>
+{% if request.user.is_superuser %}
 <a href="{% url 'posts:edit' post.pk %}"> 수정하기 </a>
 <form action="{% url 'posts:delete' post.pk %}" method="POST">
     {% csrf_token %}
     <input type="submit" value="삭제">
 </form>
+{% elif request.user == post.user %}
+<a href="{% url 'posts:edit' post.pk %}"> 수정하기 </a>
+<form action="{% url 'posts:delete' post.pk %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="삭제">
+</form>
+{% endif %}
 
 <p>댓글들</p>
+  {% for comment in comments %}
+    <p>{{ comment }}</p>
+  {% endfor %}
+<br>
+<br>
+
 {% load crispy_forms_tags %}
 <form method="POST">
   {% csrf_token %}
-    <p>댓글 : <input type="text" name="comments"></p>
+  {{ comment_form|crispy }}
+    <!--<p>댓글 : <input type="text" name="comments"></p>-->
     <input type="submit" value="댓글 작성">
 </form>
 
-{% for comment in comments %}
-<p>{{ comment }}</p>
-{% endfor %}
 {% endblock %}
