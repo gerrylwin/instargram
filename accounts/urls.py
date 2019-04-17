@@ -10,4 +10,9 @@ urlpatterns = [
     path('<int:user_pk>/', views.mypage, name = "mypage"),
     path('delete/', views.delete, name = "delete"),
     path('edit/', views.edit, name = "edit"),
+    path('password/', views.password, name='password'),
+    path('<int:user_pk>/follow', views.follow, name='follow'),
+    path('profile/', views.profile, name='profile'),
+    path('profile/edit/', views.profile_update, name='profile_update'),
+    path('user_list/', views.user_list, name="user_list"),
 ]

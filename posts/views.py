@@ -3,9 +3,15 @@ from .models import Post, Image, Comment
 from .forms import PostForm, ImageForm, CommentForm
 from django.contrib.auth.decorators import login_required
 
+from django.db.models import Q
 # Create your views here.
+@login_required
 def list(request):
-    posts = Post.objects.all()
+    posts = Post.objects.filter(
+                        Q(user__in=request.user.followings.values('id'))
+                        | Q(user=request.user.id)
+                        ).order_by('-pk')
+    # posts = Post.objects.all()
     images = Image.objects.all()
     context = {'posts': posts, 'images': images}
     return render(request, 'posts/list.html', context)
@@ -97,12 +103,12 @@ def new_comment(request, post_pk):
     return redirect('posts:detail', post_pk)
 
 def del_comment(request, post_pk, comment_pk):
-    post = get_object_or_404(Post, pk=post_pk)
+    # post = get_object_or_404(Post, pk=post_pk)
     # comment = Comment.objects.all()
     # if request.user != post.comment.comment.user:
     if request.method == "POST":
         comment = Comment.objects.get(pk=comment_pk)
-        post.comment.delete()
+        comment.delete()
     return redirect('posts:detail', post_pk)
 
 def like(request, post_pk): # 어떤 포스트인지 아이디를 가져와야하므로

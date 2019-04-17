@@ -5,10 +5,35 @@
 <p>닉네임 : {{ user_detail.username }}</p>
 <p>이메일 : {{ user_detail.email }}</p>
 
-<a href="{% url 'accounts:edit' %}">수정하기</a>
+<p>팔로잉 : {{ user_detail.followings.all.count }}</p>
+    <p>팔로워 : {{ user_detail.followers.all.count }}</p>
+    {% if user != user_detail %}
+        {% if user in user_detail.followers.all %}
+            <a href="{% url 'accounts:follow' user_detail.pk %}"><i class="fas fa-bell"></i>&nbsp;팔로잉 중</a>
+        {% else %}
+            <a href="{% url 'accounts:follow' user_detail.pk %}"><i class="far fa-bell"></i>&nbsp;팔로우 하기!</a>
+        {% endif %}
+    {% endif %}
 
+{% if request.user.is_superuser %}
+<br><br>
+<form action="{% url 'accounts:edit' %}">
+    <button type="submit" class="btn btn-warning">수정하기</button>
+</form>
+<br>
 <form action="{% url 'accounts:delete' %}" method="POST">
     {% csrf_token %}
     <input type="submit" value="회원탈퇴">
 </form>
+{% elif request.user == user_detail %}
+<br><br>
+<form action="{% url 'accounts:edit' %}">
+    <button type="submit" class="btn btn-warning">수정하기</button>
+</form>
+<br>
+<form action="{% url 'accounts:delete' %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="회원탈퇴">
+</form>
+{% endif %}
 {% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <p>{{ user.username }}</p>
+    <p>{{ user.profile.nickname }}</p>
+    <p>{{ user.profile.introduction }}</p>
+    <img src="{{ user.profile.image.url }}">
+    
+{% load crispy_forms_tags %}
+    <form action="{% url 'accounts:profile_update' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ profile_form|crispy }}
+        <button type="submit" class="btn btn-warning">프로필 수정</button>
+    </form>
+{% endblock %}

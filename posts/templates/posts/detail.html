@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block body %}
-
-<p> {{ post.pk }}</p>
+<br><br>
+<p> <a href="{% url 'accounts:mypage' post.user.pk %}">{{ post.user }}</a>님이 작성한 글</p>
 <br>
 <p> {{ post.content }}</p>
     <div id="carouselExampleControls" class="carousel slide" style="" data-ride="carousel">
@@ -20,12 +20,12 @@
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
           </a>
-        </div>
+    </div>
 <hr>
 {% if user in post.like_users.all %}
-  <a href="{% url 'posts:like' post.pk %}?next={% url 'posts:list' %}"><i class="fas fa-heart fa-2x" style="color:red;"></i></a>
+  <a href="{% url 'posts:like' post.pk %}?next={% url 'posts:list' %}"><i class="fas fa-heart fa-lg" style="color:red;"></i></a>
 {% else %}  
-  <a href="{% url 'posts:like' post.pk %}?next={% url 'posts:list' %}"><i class="far fa-heart fa-2x" style="color:red;"></i></a>
+  <a href="{% url 'posts:like' post.pk %}?next={% url 'posts:list' %}"><i class="far fa-heart fa-lg" style="color:red;"></i></a>
 {% endif %}
 <span>{{ post.like_count }} 명이 좋아요를 눌렀습니다 !</span>
 <br>
@@ -45,10 +45,10 @@
 {% endif %}
 <br>
 <p>댓글들</p>
-  {% for riple in post.comment_set.all %}
+  {% for comment in post.comment_set.all %}
   <hr>
-    <p>{{ riple.user }}님: {{ riple.comment }}</p>
-    <form action="{% url 'posts:del_comment' post.pk comment_pk %}" method="POST">
+    <p><a href="{% url 'accounts:mypage' comment.user.pk %}">{{ comment.user }}</a>님: {{ comment.comment }}</p>
+    <form action="{% url 'posts:del_comment' post.pk comment.pk %}" method="POST">
       {% csrf_token %}
       <input type="submit" value="댓글 삭제">
     </form>

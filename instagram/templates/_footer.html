@@ -1,5 +1,11 @@
 <footer class="footer mt-auto py-3 bg-dark">
-  <div class="container">
-    <span class="text-muted">© 2019 YoonWoo</span>
-  </div>
+    <div class="container d-flex justify-content-between">
+      <div class="row"> 
+        <span class="text-muted">© 2019 YoonWoo</span>
+      </div>
+      
+      <div class="row">
+        <a href="{% url 'accounts:user_list' %}">회원 목록</a>
+      </div>
+    </div>
 </footer>

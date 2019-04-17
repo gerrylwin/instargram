@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1> 회원 목록 </h1>
+
+{% for a_user in user_list %}
+<a href="{% url 'accounts:mypage' a_user.pk %}">{{a_user.pk}}: {{ a_user }}</a>&nbsp;
+    {% if user != a_user %}
+        {% if a_user in user_list.followers.all %}
+            <a href="{% url 'accounts:follow' a_user.pk %}"><i class="fas fa-bell"></i>&nbsp;팔로잉 중</a>
+        {% else %}
+            <a href="{% url 'accounts:follow' a_user.pk %}"><i class="far fa-bell"></i>&nbsp;팔로우 하기!</a>
+        {% endif %}
+    {% else %}
+    <a>me</a>
+    {% endif %}
+    
+<br><br>
+{% endfor %}
+{% endblock %}
